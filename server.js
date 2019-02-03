@@ -3,6 +3,7 @@ const bodyParser= require('body-parser');
 const uuidv4 = require('uuid/v4');
 const MongoClient = require('mongodb').MongoClient;
 const product = require('./product.js');
+const category = require('./category.js');
 var db;
 
 const app = express();
@@ -22,11 +23,19 @@ MongoClient.connect('mongodb://127.0.0.1:27017', { useNewUrlParser: true }, (err
         console.log('listening on 3000');
     });
     
+    app.get('/products', (req, res) => {
+        product.find(db, req.query, res);
+    });
+
     app.post('/products', (req, res) => {
         product.save(db, uuidv4(), req.body, res);
     });
 
     app.put('/products/:id', (req, res) => {
         product.save(db, req.params.id, req.body, res);
+    });
+
+    app.post('/categories', (req, res) => {
+        category.save(db, req.body, res);
     });
 });
