@@ -12,12 +12,15 @@ app.use(function (req, res, next) {
     next();
 });
 
-MongoClient.connect('mongodb://127.0.0.1:27017', { useNewUrlParser: true }, (err, client) => {
+var MONGO_URL = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017';
+var PORT = process.env.PORT || 3000; 
+
+MongoClient.connect(MONGO_URL, { useNewUrlParser: true }, (err, client) => {
     if (err) return console.log(err);
 
     var db = client.db('heady');
-    app.listen(3000, () => {
-        console.log('listening on 3000');
+    app.listen(PORT, () => {
+        console.log('listening on ' + PORT);
     });
     
     app.get('/products', (req, res) => {
