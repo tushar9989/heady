@@ -13,16 +13,17 @@ app.use(function (req, res, next) {
 });
 
 var MONGO_URL = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017';
-var PORT = process.env.PORT || 3000; 
+var PORT = process.env.PORT || 3000;
+var DATABASE = process.env.DATABASE || 'heady';
 
 MongoClient.connect(MONGO_URL, { useNewUrlParser: true }, (err, client) => {
     if (err) return console.log(err);
 
-    var db = client.db('heady');
     app.listen(PORT, () => {
         console.log('listening on ' + PORT);
     });
     
+    var db = client.db(DATABASE);
     app.get('/products', (req, res) => {
         product.find(db, req.query, res);
     });

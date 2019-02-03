@@ -14,7 +14,11 @@ function find(db, res) {
         (err, categories) => {
             if (err) {
                 res.status(500);
-                return console.log(err);
+                res.end(JSON.stringify({
+                    message: "find failed: " + err
+                }));
+
+                return;
             }
 
             var result = [];
@@ -53,7 +57,11 @@ function save(db, req, res) {
             (err, result) => {
                 if (err) {
                     res.status(500);
-                    return console.log(err);
+                    res.end(JSON.stringify({
+                        message: "save failed: " + err
+                    }));
+                
+                    return;
                 };
                 
                 res.status(201);

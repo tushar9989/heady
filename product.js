@@ -12,7 +12,11 @@ function find(db, req, res) {
         (err, result) => {
             if (err) {
                 res.status(500);
-                return console.log(err);
+                res.end(JSON.stringify({
+                    message: "find failed: " + err
+                }));
+                
+                return;
             }
 
             res.end(JSON.stringify(result));
@@ -46,7 +50,11 @@ function save(db, id, req, res) {
             (err, result) => {
                 if (err) {
                     res.status(500);
-                    return console.log(err);
+                    res.end(JSON.stringify({
+                        message: "save failed: " + err
+                    }));
+                    
+                    return;
                 };
                 
                 res.status(201);
