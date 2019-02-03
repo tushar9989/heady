@@ -1,3 +1,45 @@
+function find(db, res) {
+    db.collection('categories').aggregate([
+        {
+           $graphLookup: {
+              from: "categories",
+              startWith: "$_id",
+              connectFromField: "_id",
+              connectToField: "parent",
+              as: "children",
+              maxDepth: 0
+           }
+        }
+     ]).toArray(
+        (err, categories) => {
+            if (err) {
+                res.status(500);
+                return console.log(err);
+            }
+
+            var result = [];
+            for (let i = 0; i < categories.length; i++) {
+                var category = {
+                    name: categories[i]._id
+                }
+
+                if (categories[i].children.length !== 0) {
+                    category['children'] = [];
+
+                    for (let j = 0; j < categories[i].children.length; j++) {
+                        category.children.push(categories[i].children[j]._id);
+                    }
+                }
+
+                result.push(category);
+            }
+
+            res.end(JSON.stringify(result));
+            return;
+        }
+    );
+}
+
 function save(db, req, res) {
     var category = {
         _id: req.name
@@ -44,5 +86,6 @@ function save(db, req, res) {
 }
 
 module.exports = {
+    find: find,
     save: save
 };
